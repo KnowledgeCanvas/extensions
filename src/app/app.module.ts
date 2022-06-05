@@ -23,7 +23,7 @@ import {ButtonModule} from "primeng/button";
 import {DividerModule} from "primeng/divider";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {FormsModule} from "@angular/forms";
-import {ChromeTab} from "./models/tab.model";
+import {ChromeTab, FirefoxTab} from "./models/tab.model";
 import {CheckboxModule} from "primeng/checkbox";
 
 @NgModule({
@@ -71,5 +71,9 @@ declare global {
     static scripting: any;
     static tabs: ChromeTab;
     static windows: any;
+  }
+
+  class browser {
+    static tabs: FirefoxTab;
   }
 }

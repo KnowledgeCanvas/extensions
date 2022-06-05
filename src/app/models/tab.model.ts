@@ -15,3 +15,7 @@ export type ChromeTab = {
   ungroup: () => any;
   update: () => any
 }
+
+export type FirefoxTab = {
+  query: any;
+}
