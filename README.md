@@ -3,7 +3,7 @@ Chrome and Firefox extensions for Knowledge Canvas.
 
 **Note:** Extensions only work with Knowledge Canvas version 0.5.5 or higher. Knowledge Canvas must be opened and `Browser Extensions` must be enabled in the `Up Next Settings` menu.
 
-![image](https://user-images.githubusercontent.com/19367848/172074765-0a880a99-8933-4642-ac40-b5e45d0a5745.png)
+![image](https://user-images.githubusercontent.com/19367848/172075198-daee1830-2220-4989-96f1-e0e0e53fb441.png)
 
 
 # Getting Started
