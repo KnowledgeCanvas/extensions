@@ -1,6 +1,18 @@
 # Knowledge Canvas Extensions
-
 Chrome and Firefox extensions for Knowledge Canvas.
+
+# Getting Started
+
+## Chrome
+1. Ensure that Knowledge Canvas version 0.5.5 or higher is installed
+2. Enable "Browser Extensions" in the `Up Next` settings menu
+3. Run `yarn watch`
+4. Enable developer mode in Chrome, then navigate to `chrome://extensions`
+5. Click `Load unpacked`
+6. Select the `dist/knowledge-canvas-extensions` folder 
+
+## Firefox
+Coming Soon!
 
 # Angular
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.1.2.

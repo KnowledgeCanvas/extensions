@@ -25,7 +25,7 @@ export class ChromeExtensionService {
   constructor() { }
 
   async getCurrentTab() {
-    let queryOptions = { active: true };
+    let queryOptions = { active: true, currentWindow: true};
     let [tab] = await chrome.tabs.query(queryOptions);
     return tab;
   }

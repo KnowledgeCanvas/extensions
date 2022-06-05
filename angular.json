@@ -37,10 +37,7 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/primeflex/primeflex.css"
             ],
-            "scripts": [
-              {"input": "src/app/background/background.ts", "inject": false, "bundleName": "background"
-              }
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {
