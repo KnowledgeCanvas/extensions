@@ -22,11 +22,17 @@ import {ExtensionPacket} from "../models/packet.model";
   selector: 'app-popup',
   template: `
     <img [src]="icon" alt="Knowledge Canvas Logo">
+    <div class="col-12 flex justify-content-center align-items-center">
+      <img [src]="packet.favIconUrl">
+    </div>
     <div class="p-grid kc-extension-popup">
       <div class="col-12 flex justify-content-center align-items-center">
         <p-button [loading]="sending" icon="pi pi-download" label="Import" (onClick)="import($event)"></p-button>
       </div>
-      <p-divider layout="horizontal"></p-divider>
+      <p-divider *ngIf="packet?.selectedText" layout="horizontal"></p-divider>
+<!--      <div class="col=12">-->
+<!--        {{packet.title}}-->
+<!--      </div>-->
       <div class="col-12">
         <p-checkbox [(ngModel)]="includeHighlightedText"
                     *ngIf="packet?.selectedText"
@@ -64,7 +70,7 @@ import {ExtensionPacket} from "../models/packet.model";
 export class PopupComponent implements OnInit {
   icon: string = 'assets/kc-logo-transparent.svg'
   sending: boolean = false;
-  packet?: ExtensionPacket;
+  packet!: ExtensionPacket;
   includeHighlightedText: boolean = true;
 
   constructor(private chrome: ChromeExtensionService, private ipc: IpcService) {
