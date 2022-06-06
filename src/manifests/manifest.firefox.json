@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Knowledge Canvas",
+  "version": "1.0",
+  "description": "Save websites to the Knowledge Canvas!",
+  "icons": {
+    "48": "assets/icon.png"
+  },
+  "permissions": [
+    "activeTab",
+    "http://localhost/*",
+    "scripting"
+  ],
+  "browser_action": {
+    "default_icon": "assets/icon.png",
+    "default_title": "Knowledge Canvas",
+    "default_popup": "index.html"
+  }
+}
