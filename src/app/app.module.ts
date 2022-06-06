@@ -13,10 +13,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
 import {ImageModule} from "primeng/image";
 import {ButtonModule} from "primeng/button";
 import {DividerModule} from "primeng/divider";
@@ -24,8 +24,8 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {FormsModule} from "@angular/forms";
 import {ChromeTab, FirefoxTab} from "./models/tab.model";
 import {CheckboxModule} from "primeng/checkbox";
-import { ThumbnailComponent } from './knowledge-source/thumbnail.component';
-import { IconComponent } from './knowledge-source/icon.component';
+import {ThumbnailComponent} from './knowledge-source/thumbnail.component';
+import {IconComponent} from './knowledge-source/icon.component';
 import {CardModule} from "primeng/card";
 import {TooltipModule} from "primeng/tooltip";
 import {ChipsModule} from "primeng/chips";
@@ -51,7 +51,8 @@ import {ChipsModule} from "primeng/chips";
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
 
 declare global {
   class chrome {
