@@ -1,16 +1,16 @@
-import { Injectable } from '@angular/core';
-import {ChromeTab, FirefoxTab} from "../models/tab.model";
-import {ExtensionPacket} from "../models/packet.model";
+import {Injectable} from '@angular/core';
+import {FirefoxTab} from "../models/tab.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirefoxExtensionService {
 
-  constructor() { }
+  constructor() {
+  }
 
   async getCurrentTab() {
-    let queryOptions = { active: true };
+    let queryOptions = {active: true};
     let [tab] = await browser.tabs.query(queryOptions);
     return tab;
   }
@@ -18,6 +18,7 @@ export class FirefoxExtensionService {
   async getSelectedText(tab: FirefoxTab) {
     let result;
     try {
+      // TODO: this is different from the Chrome version...
       // [{result}] = await chrome.scripting.executeScript({
       //   target: {tabId: tab.id},
       //   // @ts-ignore
