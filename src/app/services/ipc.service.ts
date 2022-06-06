@@ -27,12 +27,14 @@ export class IpcService {
     if (!packet) {
       return;
     }
-
+    console.log('Sending packet: ', packet);
     let url = `http://localhost:9000/external?`
       + `link=${packet.url}`
       + `&title=${packet.title}`
       + `&favIconUrl=${packet.favIconUrl}`
-      + `&selectedText=${packet.selectedText}`;
+      + `&selectedText=${packet.selectedText}`
+      + `&topics=${JSON.stringify(packet.topics)}`
+      + `&meta=${JSON.stringify(packet.metadata)}`;
     await fetch(url)
   }
 }
