@@ -18,3 +18,15 @@ export interface WebSourceModel {
   title?: string,
   faviconUrl?: string
 }
+
+export interface WebsiteMetadataModel {
+  title?: string,
+  meta?: WebsiteMetaTagsModel[],
+  icon?: any,
+}
+
+export interface WebsiteMetaTagsModel {
+  key?: string | null,
+  value?: string | null,
+  property?: string | null
+}

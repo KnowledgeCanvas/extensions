@@ -17,7 +17,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { PopupComponent } from './popup/popup.component';
 import {ImageModule} from "primeng/image";
 import {ButtonModule} from "primeng/button";
 import {DividerModule} from "primeng/divider";
@@ -25,11 +24,17 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {FormsModule} from "@angular/forms";
 import {ChromeTab, FirefoxTab} from "./models/tab.model";
 import {CheckboxModule} from "primeng/checkbox";
+import { ThumbnailComponent } from './knowledge-source/thumbnail.component';
+import { IconComponent } from './knowledge-source/icon.component';
+import {CardModule} from "primeng/card";
+import {TooltipModule} from "primeng/tooltip";
+import {ChipsModule} from "primeng/chips";
 
 @NgModule({
   declarations: [
     AppComponent,
-    PopupComponent
+    ThumbnailComponent,
+    IconComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +43,10 @@ import {CheckboxModule} from "primeng/checkbox";
     DividerModule,
     ProgressSpinnerModule,
     FormsModule,
-    CheckboxModule
+    CheckboxModule,
+    CardModule,
+    TooltipModule,
+    ChipsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -13,10 +13,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
+import {WebsiteMetadataModel} from "./websource.model";
 
 export type ExtensionPacket = {
   url: string,
   title: string,
   favIconUrl: string,
   selectedText: string,
+  metadata?: WebsiteMetadataModel
+  topics?: string[]
 }

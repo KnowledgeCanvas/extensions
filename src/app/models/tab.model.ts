@@ -1,3 +1,4 @@
+import {WebsiteMetadataModel} from "./websource.model";
 
 
 export type ChromeTab = {
@@ -8,6 +9,8 @@ export type ChromeTab = {
   id: any;
   title: string;
   url: string;
+  selectedText: string;
+  metadata?: WebsiteMetadataModel;
   remove: () => any;
   sendMessage: () => any;
   setZoom: () => any;
