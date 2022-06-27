@@ -29,25 +29,33 @@ import {IconComponent} from './knowledge-source/icon.component';
 import {CardModule} from "primeng/card";
 import {TooltipModule} from "primeng/tooltip";
 import {ChipsModule} from "primeng/chips";
+import { CardComponent } from './knowledge-source/card.component';
+import {ToggleButtonModule} from "primeng/togglebutton";
+import {TabViewModule} from "primeng/tabview";
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 @NgModule({
   declarations: [
     AppComponent,
     ThumbnailComponent,
-    IconComponent
+    IconComponent,
+    CardComponent
   ],
-  imports: [
-    BrowserModule,
-    ImageModule,
-    ButtonModule,
-    DividerModule,
-    ProgressSpinnerModule,
-    FormsModule,
-    CheckboxModule,
-    CardModule,
-    TooltipModule,
-    ChipsModule
-  ],
+    imports: [
+        BrowserModule,
+        ImageModule,
+        ButtonModule,
+        DividerModule,
+        ProgressSpinnerModule,
+        FormsModule,
+        CheckboxModule,
+        CardModule,
+        TooltipModule,
+        ChipsModule,
+        ToggleButtonModule,
+        TabViewModule,
+        InputTextareaModule
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -15,8 +15,7 @@
  */
 import {Injectable} from '@angular/core';
 import {ChromeTab} from "../models/tab.model";
-import {WebsiteMetadataModel} from "../models/websource.model";
-
+import {WebsiteMetadataModel, WebsiteMetaTagsModel} from "../models/websource.model";
 
 @Injectable({
   providedIn: 'root'
@@ -28,59 +27,130 @@ export class ChromeExtensionService {
   async getCurrentTab() {
     let queryOptions = {active: true, currentWindow: true};
     let [tab] = await chrome.tabs.query(queryOptions);
+    console.log('Chrome Tab retrieved: ', tab);
     return tab;
   }
 
-  async getMetaTags(tab: ChromeTab) {
-    let result;
+
+  getMetaTitle = () => {
+
+  }
+
+
+
+  /**
+   * TODO: finish this, get title, charset, og: and dc: tags
+   * @param tab
+   */
+  async getMetadata(tab: ChromeTab) {
+    let metadata: WebsiteMetadataModel = {
+      title: tab.title,
+      meta: [],
+    };
+
     try {
+      let result, title;
+
+      if (tab.title && tab.title.trim() != '') {
+        title = tab.title;
+      } else {
+        [{result}] = await chrome.scripting.executeScript({
+          target: {tabId: tab.id},
+          function: () => {
+            let titleTags = document.getElementsByTagName('title');
+            return titleTags && titleTags.length > 0 ? titleTags[0].innerText : '';
+          }
+        });
+        title = result;
+      }
+
+      console.log('Metadata title: ', title);
+      metadata.title = title;
+    } catch (e) {
+      // TODO:
+      console.log('Could not get title: ', e);
+    }
+
+    try {
+      let result;
+      console.log('Trying to get metatags...');
       [{result}] = await chrome.scripting.executeScript({
         target: {tabId: tab.id},
         function: () => {
-          console.log('Attempting to get meta tags, document: ', document);
-          let metadata: WebsiteMetadataModel = {};
-          // Meta Tags
           let meta = document.getElementsByTagName('meta');
-          if (meta && meta.length) {
-            let extractedMeta = [];
-            for (let i = 0; i < meta.length; i++) {
-              // Charset tag
-              if (meta[i].attributes && meta[i].attributes[0].name === 'charset') {
-                extractedMeta.push({key: 'charset', value: meta[i].attributes[0].textContent, property: ''})
+
+          console.log('meta tags: ', meta);
+
+          if (!meta || meta.length <= 0) {
+            return [];
+          }
+
+          let attr: (..._: any) => string | null = (i: number, j: number) => {
+            return meta[i]?.attributes[j]?.textContent;
+          }
+
+          let matches: (..._: any) => boolean = (target: string, i: number, j: number) => {
+            return attr(i, j)?.startsWith(target) ?? false;
+          }
+
+          let filterPermute: (..._: any) => string = (target: string, i: number) => {
+            let val1 = attr(i, 1) ?? '';
+            let val2 = attr(i, 2) ?? '';
+
+            if (val1.startsWith(target)) {
+              if (val2.startsWith(target)) {
+                return '';
+              } else {
+                return val2
               }
+            } else {
+              return val1;
+            }
+          }
 
-              // Open Graph tags
-              if (meta[i]?.attributes[0]?.textContent?.startsWith('og:')) {
-                let val = '';
-                if (!meta[i].attributes[1]?.textContent?.startsWith('og:')) {
-                  val = meta[i].attributes[1].textContent ?? '';
-                } else {
-                  val = meta[i].attributes[2].textContent ?? '';
-                }
+          let metatags: WebsiteMetaTagsModel[] = [];
+          let targets: string[] = ['og:', 'dc:', 'keywords']
 
-                if (val !== '') {
-                  let attr = {
-                    key: meta[i].attributes[0]?.textContent,
-                    value: val,
-                    property: ''
-                  };
-                  extractedMeta.push(attr);
-                  if (attr.key === 'og:title' && attr.value) {
-                    metadata.title = attr.value;
+          // TODO: remove
+          console.log('meta tags: ', meta);
+          console.log('Targets: ', targets);
+
+          for (let i = 0; i < meta.length; i++) {
+            let name = meta[i]?.attributes[0]?.name;
+            if (name && name === 'charset') { /* Charset tags */
+              metatags.push({
+                key: 'charset',
+                value: attr(i, 0),
+                property: ''
+              });
+            } else {
+              for (let target of targets) {
+                if (matches(target, i, 0)) {
+                  let val = filterPermute(target, i);
+                  if (val !== '' && !val.startsWith(target)) {
+                    metatags.push({
+                      key: attr(i, 0),
+                      value: val,
+                      property: ''
+                    })
                   }
                 }
               }
             }
-            metadata.meta = extractedMeta;
           }
-          return metadata;
+          console.log('Returning metatags: ', metatags);
+          return metatags
         }
       });
-      tab.metadata = result;
-      return tab;
+      console.log('Got metatags: ', result);
+      metadata.meta = result;
     } catch (e) {
-      return tab;
+      // TODO:
+      console.error('Unable to get metatags...: ', e);
     }
+
+    tab.metadata = metadata;
+    return tab;
   }
 
   async getSelectedText(tab: ChromeTab) {

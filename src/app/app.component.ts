@@ -14,44 +14,59 @@
  limitations under the License.
  */
 import {Component} from '@angular/core';
-import {ExtensionPacket} from "./models/packet.model";
 import {ChromeExtensionService} from "./services/chrome-extension.service";
 import {IpcService} from "./services/ipc.service";
 import {ChromeTab} from "./models/tab.model";
+import {KnowledgeSource} from "./models/knowledge.source.model";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
   template: `
-    <app-thumbnail *ngIf="packet && packet.favIconUrl" [icon]="packet.favIconUrl"></app-thumbnail>
-    <p-card>
-      <ng-template pTemplate="header">
-        <div class="flex flex-row align-items-center justify-content-center">
-          <h4>{{packet.title | slice:0:42}}{{packet.title.length > 42 ? '...' : ''}}</h4>
-        </div>
-      </ng-template>
+    <div class="kc-extension-popup">
+      <app-card [ks]="ks"
+                (onImport)="import($event)"
+                [loading]="sending"
+                [disabled]="kcUnavailable"
+      ></app-card>
+    </div>
 
-      <div class="p-grid kc-extension-popup">
-        <div class="col-12" *ngIf="packet?.selectedText">
-          <p-checkbox [(ngModel)]="includeHighlightedText" class="mb-4" [binary]="true" label="Include Highlighted Text"></p-checkbox>
-          <textarea class="w-full" id="selectedText" [disabled]="!includeHighlightedText" rows="5" [(ngModel)]="packet.selectedText"></textarea>
-        </div>
+    <!--    <p-card>-->
+    <!--      <ng-template pTemplate="header">-->
+    <!--        <div class="flex flex-row align-items-center justify-content-center">-->
+    <!--          <input [(ngModel)]="packet.metadata.title"-->
+    <!--                 pInputText-->
+    <!--                 class="p-fluid w-full">-->
+    <!--        </div>-->
+    <!--      </ng-template>-->
 
-        <div class="col-12 p-fluid w-full">
-          <b>Topics</b>
-          <p-chips [(ngModel)]="packet.topics"></p-chips>
-        </div>
 
-        <div class="col-12 flex justify-content-center align-items-center">
-          <button pButton [disabled]="kcUnavailable" [loading]="sending" pTooltip="Import" tooltipPosition="bottom" type="button" icon="pi pi-plus" class="p-button-rounded shadow-5" (click)="import($event)"></button>
-        </div>
+    <!--      <div class="p-grid kc-extension-popup">-->
+    <!--        <div class="col-12" *ngIf="packet?.selectedText">-->
+    <!--          <p-checkbox [(ngModel)]="includeHighlightedText" class="mb-4" [binary]="true" label="Include Highlighted Text"></p-checkbox>-->
+    <!--          <textarea class="w-full" id="selectedText" [disabled]="!includeHighlightedText" rows="5" [(ngModel)]="packet.selectedText"></textarea>-->
+    <!--        </div>-->
 
-        <div class="col-12 flex justify-content-center align-items-center text-red-500">
-          <div *ngIf="kcUnavailable">
-            Knowledge Canvas Unavailable
-          </div>
-        </div>
-      </div>
-    </p-card>
+    <!--    TODO: Eventually provide the ability to select a project directly from the extension-->
+
+<!--    <div *ngIf="kcUnavailable" class="col-12">-->
+<!--      <div class="flex justify-content-center align-items-center text-red-500">-->
+<!--        Knowledge Canvas Unavailable<br>-->
+<!--        Make sure "Browser Extensions" is enabled in the Import Settings menu-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--    <div class="col-12 flex justify-content-center align-items-center">-->
+<!--      <button pButton-->
+<!--              icon="pi pi-plus"-->
+<!--              class="w-full p-fluid shadow-5"-->
+<!--              [disabled]="kcUnavailable"-->
+<!--              [loading]="sending"-->
+<!--              pTooltip="Import"-->
+<!--              tooltipPosition="top"-->
+<!--              (click)="import($event)"></button>-->
+<!--    </div>-->
+
   `,
   styles: [
     `
@@ -74,32 +89,74 @@ import {ChromeTab} from "./models/tab.model";
   ]
 })
 export class AppComponent {
-  icon: string = 'assets/kc-logo-transparent.svg';
-  thumbnail: string = '';
   sending: boolean = false;
-  packet!: ExtensionPacket;
   kcUnavailable: boolean = false;
   includeHighlightedText: boolean = true;
 
-  constructor(private chrome: ChromeExtensionService, private ipc: IpcService) {
+  ks: KnowledgeSource = {
+    metadata: [],
+    title: '',
+    description: '',
+    icon: '',
+    iconUrl: '',
+    ingestType: '',
+    snippet: '',
+    rawText: '',
+    flagged: false,
+    topics: [],
+    accessLink: '',
+    thumbnail: ''
+  }
+
+  constructor(private chrome: ChromeExtensionService, private ipc: IpcService, private sanitizer: DomSanitizer) {
+    // TODO: Automatically extract other tags like `article` and `code`, then display to the user as optional
     this.chrome.getCurrentTab()
       .then(this.chrome.getSelectedText)
-      .then(this.chrome.getMetaTags)
+      .then(this.chrome.getMetadata)
       .then((tab: ChromeTab) => {
-        const packet: ExtensionPacket = {
-          favIconUrl: tab.favIconUrl,
-          selectedText: tab.selectedText,
-          title: tab.title,
-          url: tab.url,
-          metadata: tab.metadata
-        }
-        console.log('Packet: ', packet);
-        this.packet = packet
+        console.log('Got Chrome Tab: ', tab);
 
-        if (packet.metadata?.meta) {
-          for (let m of packet.metadata?.meta) {
+        this.ks = {
+          thumbnail: '',
+          title: tab.title,
+          description: '',
+          accessLink: tab.url,
+          iconUrl: tab.favIconUrl,
+          icon: tab.favIconUrl,
+          rawText: tab.selectedText,
+          topics: [],
+          ingestType: 'website',
+          metadata: []
+        }
+
+        if (tab.favIconUrl) {
+          fetch(tab.favIconUrl).then((response) => {
+            response.blob().then((iconBlob) => {
+              let objectURL = URL.createObjectURL(iconBlob);
+              let icon = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+              console.log(`Got ks icon: ${icon} from iconURL: ${tab.favIconUrl}`);
+              this.ks.icon = icon;
+            })
+          }).catch((reason) => {
+            console.log('Failed to fetch icon because: ', reason);
+          })
+        } else {
+          this.ks.iconUrl = tab.url
+          this.ks.icon = 'assets/kc-icon-greyscale.png'
+        }
+
+        if (tab.metadata.meta) {
+          this.ks.metadata = tab.metadata.meta;
+
+          for (let m of tab.metadata.meta) {
             if (m.key == 'og:image') {
-              this.thumbnail = m.value ?? m.property ?? '';
+              this.ks.thumbnail = m.value ?? m.property ?? '';
+            } else if (m.key == 'og:description') {
+              this.ks.description = m.value ?? m.property ?? '';
+            }
+
+            if (m.key == 'keywords') {
+              this.ks.topics = m.value?.split(',');
             }
           }
         }
@@ -107,27 +164,15 @@ export class AppComponent {
   }
 
   async import($event: any) {
-    if (!this.packet) {
-      return;
-    }
     this.sending = true;
 
-    let packet: ExtensionPacket = {
-      title: this.packet.title,
-      url: this.packet.url,
-      favIconUrl: this.packet.favIconUrl,
-      selectedText: this.includeHighlightedText ? this.packet.selectedText : '',
-      topics: this.packet.topics,
-      metadata: this.packet.metadata
-    }
-
     // Remove selected text if the user does not want it included
-    if (!this.includeHighlightedText && this.packet) {
-      packet.selectedText = '';
+    if (!this.includeHighlightedText) {
+      this.ks.rawText = undefined;
     }
 
     // Send packet
-    this.ipc.send(packet).then(() => {
+    this.ipc.send(this.ks).then(() => {
       setTimeout(() => {
         this.sending = false;
       }, 1500);

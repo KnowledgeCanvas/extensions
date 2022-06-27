@@ -13,12 +13,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {WebsiteMetadataModel} from "./websource.model";
+import {WebsiteMetaTagsModel} from "./websource.model";
 
-export type ExtensionPacket = {
-  accessLink: string,
-  favIconUrl: string,
-  selectedText: string,
-  metadata: WebsiteMetadataModel
-  topics: string[]
+export interface KnowledgeSource {
+  description: string;
+  icon?: any;
+  iconUrl?: string;
+  ingestType: string;
+  snippet?: string;
+  rawText?: string;
+  flagged?: boolean;
+  title: string;
+  topics?: string[];
+  accessLink: string;
+  thumbnail: string;
+  metadata: WebsiteMetaTagsModel[];
 }

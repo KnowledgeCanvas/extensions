@@ -14,13 +14,14 @@
  limitations under the License.
  */
 export interface WebSourceModel {
-  url: string,
-  title?: string,
+  accessLink: string,
+  title: string,
   faviconUrl?: string
+  selectedText?: string
 }
 
 export interface WebsiteMetadataModel {
-  title?: string,
+  title: string,
   meta?: WebsiteMetaTagsModel[],
   icon?: any,
 }

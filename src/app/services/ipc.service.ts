@@ -13,28 +13,24 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import { Injectable } from '@angular/core';
-import {ExtensionPacket} from "../models/packet.model";
+import {Injectable} from '@angular/core';
+import {KnowledgeSource} from "../models/knowledge.source.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class IpcService {
 
-  constructor() { }
+  constructor() {
+  }
 
-  async send(packet: ExtensionPacket | undefined) {
-    if (!packet) {
-      return;
-    }
-    console.log('Sending packet: ', packet);
-    let url = `http://localhost:9000/external?`
-      + `link=${packet.url}`
-      + `&title=${packet.title}`
-      + `&favIconUrl=${packet.favIconUrl}`
-      + `&selectedText=${packet.selectedText}`
-      + `&topics=${JSON.stringify(packet.topics)}`
-      + `&meta=${JSON.stringify(packet.metadata)}`;
-    await fetch(url)
+  async send(ks: Partial<KnowledgeSource>) {
+    let str = JSON.stringify(ks);
+    console.log(`Sending packet: ${str} -- `, ks);
+    let url = `http://localhost:9000/external`;
+    await fetch(url, {
+      method: 'POST',
+      body: str
+    })
   }
 }
