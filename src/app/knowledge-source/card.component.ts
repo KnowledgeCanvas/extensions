@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, EventEmitter, HostListener, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {KnowledgeSource} from "../models/knowledge.source.model";
 
 @Component({
@@ -48,7 +48,7 @@ import {KnowledgeSource} from "../models/knowledge.source.model";
                 </p-chips>
               </div>
             </p-tabPanel>
-            <p-tabPanel header="Advaned" *ngIf="ks.rawText">
+            <p-tabPanel header="Advanced" *ngIf="ks.rawText">
               <div *ngIf="ks.rawText">
                 <p-checkbox [(ngModel)]="includeHighlightedText" class="mb-4" [binary]="true" label="Include Highlighted Text"></p-checkbox>
                 <textarea pInputTextarea class="w-full" id="selectedText" rows="6" [disabled]="!includeHighlightedText" [(ngModel)]="ks.rawText"></textarea>
@@ -76,9 +76,7 @@ import {KnowledgeSource} from "../models/knowledge.source.model";
     </div>
 
   `,
-  styles: [
-
-  ]
+  styles: []
 })
 export class CardComponent implements OnInit {
   @Input() ks: Partial<KnowledgeSource> = {};
@@ -97,7 +95,7 @@ export class CardComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  import($event: MouseEvent) {
+  import(_: MouseEvent) {
     this.onImport.emit()
   }
 }
