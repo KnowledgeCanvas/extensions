@@ -1,7 +1,7 @@
-# Knowledge Canvas Extensions
-Chrome and Firefox extensions for Knowledge Canvas. 
+# Knowledge Extensions
+Chrome and Firefox extensions for the `Knowledge` application. 
 
-**Note:** Extensions only work with Knowledge Canvas version 0.5.5 or higher. Knowledge Canvas must be opened and `Browser Extensions` must be enabled in the `Up Next Settings` menu.
+**Note:** Extensions only work with `Knowledge` version 0.5.5 or higher. `Knowledge` must be opened and `Browser Extensions` must be enabled in the `Up Next Settings` menu.
 
 ![image](https://user-images.githubusercontent.com/19367848/172075198-daee1830-2220-4989-96f1-e0e0e53fb441.png)
 
@@ -11,12 +11,12 @@ Chrome and Firefox extensions for Knowledge Canvas.
 Extensions are side-loaded using developer mode in Chrome and Firefox until further notice.
 
 ## Chrome
-1. Ensure that Knowledge Canvas version 0.5.5 or higher is installed
+1. Ensure that `Knowledge` version 0.5.5 or higher is installed
 2. Enable "Browser Extensions" in the `Up Next` settings menu
 3. Run `yarn watch`
 4. Enable developer mode in Chrome, then navigate to `chrome://extensions`
 5. Click `Load unpacked`
-6. Select the `dist/knowledge-canvas-extensions` folder 
+6. Select the `dist/knowledge-extensions` folder 
 
 ## Firefox
 Coming Soon!
