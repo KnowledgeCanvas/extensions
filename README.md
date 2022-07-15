@@ -2,6 +2,7 @@
 
 Chrome extension for the [Knowledge](https://github.com/KnowledgeCanvas/knowledge) application (Firefox extension coming soon!).
 
+
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
@@ -47,7 +48,7 @@ Knowledge Extensions are meant to augment the use of the Knowledge application b
 5. Enable "Developer mode"
 6. Click `Load unpacked`
 7. Select the `knowledge-extensions` folder
-- When building from source, this will be under `<root>/dist/knowledge-extensions`
+  - When building from source, this will be under `<root>/dist/knowledge-extensions`
 8. (Optional): Click the Chrome Extensions button and pin `Knowledge Extension` for quick access
 
 
