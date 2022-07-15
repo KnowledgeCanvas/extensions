@@ -1,6 +1,6 @@
 {
-  "name": "Knowledge Canvas",
-  "description": "Import websites directly to Knowledge Canvas!",
+  "name": "Knowledge Extension",
+  "description": "Import websites directly to the Knowledge application!",
   "version": "1.0",
   "manifest_version": 3,
   "permissions": [

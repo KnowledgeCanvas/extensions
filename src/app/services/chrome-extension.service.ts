@@ -31,15 +31,7 @@ export class ChromeExtensionService {
     return tab;
   }
 
-
-  getMetaTitle = () => {
-
-  }
-
-
-
   /**
-   * TODO: finish this, get title, charset, og: and dc: tags
    * @param tab
    */
   async getMetadata(tab: ChromeTab) {
@@ -73,67 +65,41 @@ export class ChromeExtensionService {
 
     try {
       let result;
-      console.log('Trying to get metatags...');
       [{result}] = await chrome.scripting.executeScript({
         target: {tabId: tab.id},
         function: () => {
+          let metatags: WebsiteMetaTagsModel[] = [];
           let meta = document.getElementsByTagName('meta');
 
-          console.log('meta tags: ', meta);
-
-          if (!meta || meta.length <= 0) {
-            return [];
-          }
-
-          let attr: (..._: any) => string | null = (i: number, j: number) => {
-            return meta[i]?.attributes[j]?.textContent;
-          }
-
-          let matches: (..._: any) => boolean = (target: string, i: number, j: number) => {
-            return attr(i, j)?.startsWith(target) ?? false;
-          }
-
-          let filterPermute: (..._: any) => string = (target: string, i: number) => {
-            let val1 = attr(i, 1) ?? '';
-            let val2 = attr(i, 2) ?? '';
-
-            if (val1.startsWith(target)) {
-              if (val2.startsWith(target)) {
-                return '';
-              } else {
-                return val2
-              }
-            } else {
-              return val1;
-            }
-          }
-
-          let metatags: WebsiteMetaTagsModel[] = [];
-          let targets: string[] = ['og:', 'dc:', 'keywords']
-
-          // TODO: remove
-          console.log('meta tags: ', meta);
-          console.log('Targets: ', targets);
-
           for (let i = 0; i < meta.length; i++) {
-            let name = meta[i]?.attributes[0]?.name;
-            if (name && name === 'charset') { /* Charset tags */
-              metatags.push({
-                key: 'charset',
-                value: attr(i, 0),
-                property: ''
-              });
-            } else {
-              for (let target of targets) {
-                if (matches(target, i, 0)) {
-                  let val = filterPermute(target, i);
-                  if (val !== '' && !val.startsWith(target)) {
-                    metatags.push({
-                      key: attr(i, 0),
-                      value: val,
-                      property: ''
-                    })
-                  }
+            console.log(`Meta[${i}] = `, meta[i]);
+
+            let names = [
+              meta[i].name,
+              meta[i].attributes.getNamedItem('property')?.textContent,
+            ].filter(n => n);
+
+            const isTarget = names.some(n => n && (
+              n.startsWith('og:') || /* OpenGraph */
+              n.startsWith('dc:') || /* Dublin Core */
+              (n.startsWith('twitter:') && !n.startsWith('twitter:app:')) || /* Twitter (but not app) */
+              n.startsWith('description') || /* Description */
+              n.startsWith('article:') || /* Articles */
+              n.startsWith('keywords') /* Keywords */
+            ));
+
+            if (isTarget) {
+              let contents = [
+                meta[i].content,
+              ].filter(c => c);
+
+              for (let name of names) {
+                for (let content of contents) {
+                  metatags.push({
+                    key: name,
+                    value: content,
+                    property: ''
+                  });
                 }
               }
             }

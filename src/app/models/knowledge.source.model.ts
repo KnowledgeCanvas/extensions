@@ -26,6 +26,6 @@ export interface KnowledgeSource {
   title: string;
   topics?: string[];
   accessLink: string;
-  thumbnail: string;
+  thumbnail?: any;
   metadata: WebsiteMetaTagsModel[];
 }

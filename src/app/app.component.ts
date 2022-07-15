@@ -25,48 +25,10 @@ import {DomSanitizer} from "@angular/platform-browser";
   template: `
     <div class="kc-extension-popup">
       <app-card [ks]="ks"
-                (onImport)="import($event)"
                 [loading]="sending"
                 [disabled]="kcUnavailable"
       ></app-card>
     </div>
-
-    <!--    <p-card>-->
-    <!--      <ng-template pTemplate="header">-->
-    <!--        <div class="flex flex-row align-items-center justify-content-center">-->
-    <!--          <input [(ngModel)]="packet.metadata.title"-->
-    <!--                 pInputText-->
-    <!--                 class="p-fluid w-full">-->
-    <!--        </div>-->
-    <!--      </ng-template>-->
-
-
-    <!--      <div class="p-grid kc-extension-popup">-->
-    <!--        <div class="col-12" *ngIf="packet?.selectedText">-->
-    <!--          <p-checkbox [(ngModel)]="includeHighlightedText" class="mb-4" [binary]="true" label="Include Highlighted Text"></p-checkbox>-->
-    <!--          <textarea class="w-full" id="selectedText" [disabled]="!includeHighlightedText" rows="5" [(ngModel)]="packet.selectedText"></textarea>-->
-    <!--        </div>-->
-
-    <!--    TODO: Eventually provide the ability to select a project directly from the extension-->
-
-<!--    <div *ngIf="kcUnavailable" class="col-12">-->
-<!--      <div class="flex justify-content-center align-items-center text-red-500">-->
-<!--        Knowledge Canvas Unavailable<br>-->
-<!--        Make sure "Browser Extensions" is enabled in the Import Settings menu-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--    <div class="col-12 flex justify-content-center align-items-center">-->
-<!--      <button pButton-->
-<!--              icon="pi pi-plus"-->
-<!--              class="w-full p-fluid shadow-5"-->
-<!--              [disabled]="kcUnavailable"-->
-<!--              [loading]="sending"-->
-<!--              pTooltip="Import"-->
-<!--              tooltipPosition="top"-->
-<!--              (click)="import($event)"></button>-->
-<!--    </div>-->
-
   `,
   styles: [
     `
@@ -117,7 +79,7 @@ export class AppComponent {
         console.log('Got Chrome Tab: ', tab);
 
         this.ks = {
-          thumbnail: '',
+          thumbnail: undefined,
           title: tab.title,
           description: '',
           accessLink: tab.url,
@@ -151,19 +113,39 @@ export class AppComponent {
           for (let m of tab.metadata.meta) {
             if (m.key == 'og:image') {
               this.ks.thumbnail = m.value ?? m.property ?? '';
-            } else if (m.key == 'og:description') {
+              fetch(this.ks.thumbnail).then((response) => {
+                response.blob().then((iconBlob) => {
+                  let objectURL = URL.createObjectURL(iconBlob);
+                  let thumbnail = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+                  console.log(`Got ks thumbnail: ${thumbnail} from iconURL: ${tab.favIconUrl}`);
+                  this.ks.thumbnail = thumbnail;
+                })
+              }).catch((reason) => {
+                console.log('Failed to fetch thumbnail because: ', reason);
+              })
+            } else if (m.key == 'og:description' || m.key == 'description') {
               this.ks.description = m.value ?? m.property ?? '';
-            }
-
-            if (m.key == 'keywords') {
+            } else if (m.key == 'keywords') {
               this.ks.topics = m.value?.split(',');
             }
           }
         }
       })
+
+    setTimeout(() => {
+      /*
+       * NOTE: Cannot use (click) listener in HTML elements due to an issue with Chrome
+       * See: https://stackoverflow.com/questions/70353636/angular-gives-refused-to-execute-inline-event-handler-error
+       * See: https://stackoverflow.com/questions/36324333/refused-to-execute-inline-event-handler-because-it-violates-csp-sandbox
+       */
+      // @ts-ignore
+      document.getElementById('importBtn').addEventListener('click', () => {
+        this.import()
+      });
+    }, 1000);
   }
 
-  async import($event: any) {
+  import() {
     this.sending = true;
 
     // Remove selected text if the user does not want it included

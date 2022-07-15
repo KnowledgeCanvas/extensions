@@ -1,6 +1,7 @@
 # Knowledge Extensions
 
-Chrome extension for the [Knowledge](https://github.com/KnowledgeCanvas/knowledge) application (Firefox extension coming soon!). 
+Chrome extension for the [Knowledge](https://github.com/KnowledgeCanvas/knowledge) application (Firefox extension coming soon!).
+
 
 - [Features](#features)
 - [Screenshots](#screenshots)
@@ -18,7 +19,7 @@ Knowledge Extensions are meant to augment the use of the Knowledge application b
   - [x] [OpenGraph](https://ogp.me/) extraction (description, thumbnail, type, etc.)
   - [x] Highlighted text extraction
   - [ ] Article extraction
-  - [ ] Code blocks extraction  
+  - [ ] Code blocks extraction
 - [x] `Important` flag
 - [ ] Sync with `Knowledge` for existing sources
   - [ ] Show source details in extension if it exists in `Knowledge`

@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {KnowledgeSource} from "../models/knowledge.source.model";
 
 @Component({
@@ -64,13 +64,14 @@ import {KnowledgeSource} from "../models/knowledge.source.model";
 
         <ng-template pTemplate="footer">
           <button pButton
+                  id="importBtn"
                   icon="pi pi-plus"
                   class="w-full p-fluid shadow-5"
                   [disabled]="disabled"
                   [loading]="loading"
                   pTooltip="Import"
-                  tooltipPosition="top"
-                  (click)="import($event)"></button>
+                  tooltipPosition="top">
+          </button>
         </ng-template>
       </p-card>
     </div>
@@ -81,8 +82,6 @@ import {KnowledgeSource} from "../models/knowledge.source.model";
 export class CardComponent implements OnInit {
   @Input() ks: Partial<KnowledgeSource> = {};
 
-  @Output() onImport = new EventEmitter();
-
   @Input() disabled: boolean = false;
 
   @Input() loading: boolean = false;
@@ -90,12 +89,9 @@ export class CardComponent implements OnInit {
   includeHighlightedText: boolean = true;
 
   constructor() {
+
   }
 
   ngOnInit(): void {
-  }
-
-  import(_: MouseEvent) {
-    this.onImport.emit()
   }
 }
