@@ -1,12 +1,13 @@
 {
-  "name": "knowledge-canvas-extensions",
-  "version": "0.0.1",
+  "name": "knowledge-extensions",
+  "version": "0.1.0",
   "scripts": {
     "ng": "ng",
     "clean": "rm -rf dist",
+    "purge": "rm -rf node_modules .angular .yarn/cache",
     "start": "ng serve",
-    "build": "ng build --configuration development",
-    "watch": "ng build --watch --configuration development"
+    "build": "ng build",
+    "watch": "ng build --watch"
   },
   "private": true,
   "dependencies": {
