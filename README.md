@@ -2,7 +2,7 @@
 
 Chrome extension for the [Knowledge](https://github.com/KnowledgeCanvas/knowledge) application (Firefox extension coming soon!).
 
-
+- [Download for Chrome](https://github.com/KnowledgeCanvas/extensions/releases/tag/v0.1.0)
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
