@@ -44,7 +44,7 @@ Knowledge Extensions are meant to augment the use of the Knowledge application b
 **Note:** Extensions only work with `Knowledge` version 0.6.0 or higher. `Knowledge` must be opened and `Browser Extensions` must be enabled in the `Import Settings` menu. Extensions are side-loaded using developer mode in Chrome for now. We are still investigating the viability of hosting the extension on the Chrome Web Store.
 
 ## Instructions
-1. Download the prebuilt zip, or build from source ([see below](#build-from-source))
+1. Download the prebuilt zip, or build from source ([see below](##build-from-source))
 2. Ensure that `Knowledge` version 0.6.0 or higher is installed
 3. In `Knowledge`, go to `Settings > Import` and enable "Browser Extensions"
 4. In Chrome, navigate to `chrome://extensions`
@@ -54,7 +54,7 @@ Knowledge Extensions are meant to augment the use of the Knowledge application b
   - When building from source, this will be under `<root>/dist/knowledge-extensions`
 8. (Optional): Click the Chrome Extensions button and pin `Knowledge Extension` for quick access
 
-
+<img width="1149" alt="image" src="https://user-images.githubusercontent.com/19367848/179329180-00022d28-1cf9-4540-88d5-2e9f637f82fd.png">
 <img width="1278" alt="image" src="https://user-images.githubusercontent.com/19367848/179286999-10bc8da1-844e-4821-8e50-b2184ffeae49.png">
 
 ## Build from source (Optional)
