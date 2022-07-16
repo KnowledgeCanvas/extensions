@@ -2,10 +2,14 @@
 
 Chrome extension for the [Knowledge](https://github.com/KnowledgeCanvas/knowledge) application (Firefox extension coming soon!).
 
-- [Download for Chrome](https://github.com/KnowledgeCanvas/extensions/releases/tag/v0.1.0)
+[Download for Chrome](https://github.com/KnowledgeCanvas/extensions/releases/tag/v0.1.0)
+
+**Table of Contents**
 - [Features](#features)
 - [Screenshots](#screenshots)
 - [Getting Started](#getting-started)
+  - [Instructions](#instructions)
+  - [Build from source](#build-from-source-optional)
 
 # Features
 
@@ -57,7 +61,7 @@ Knowledge Extensions are meant to augment the use of the Knowledge application b
 <img width="1149" alt="image" src="https://user-images.githubusercontent.com/19367848/179329180-00022d28-1cf9-4540-88d5-2e9f637f82fd.png">
 <img width="1278" alt="image" src="https://user-images.githubusercontent.com/19367848/179286999-10bc8da1-844e-4821-8e50-b2184ffeae49.png">
 
-# Build from source (Optional)
+## Build from source (Optional)
 
 1. Clone this repository
 2. Delete the `.yarnrc.yml` file. This will be replaced in the next steps
